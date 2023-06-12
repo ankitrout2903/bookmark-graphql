@@ -1,0 +1,34 @@
+type Query {
+  me: User!
+  bookmarks: [Bookmark!]!
+  bookmark(id: Int!): Bookmark!
+}
+
+type Mutation {
+  signup(email: String!, password: String!): User!
+  signin(email: String!, password: String!): User!
+  editUser(firstName: String, lastName: String): User!
+  createBookmark(title: String!, description: String, link: String!): Bookmark!
+  editBookmark(id: Int!, title: String, description: String, link: String): Bookmark!
+  deleteBookmark(id: Int!): Boolean!
+}
+
+type User {
+  id: Int!
+  email: String!
+  firstName: String
+  lastName: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  bookmarks: [Bookmark!]!
+}
+
+type Bookmark {
+  id: Int!
+  title: String!
+  description: String
+  link: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+}

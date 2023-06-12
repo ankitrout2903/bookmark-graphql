@@ -1,24 +1,30 @@
 import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '@prisma/client';
+// import { User } from '@prisma/client';
 import { Request } from 'express';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { EditUserDto } from './dto';
+import { EditUserInput } from './dto';
 import { UserService } from './user.service';
+// import { UseGuards } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GetCurrentUser } from '../auth/decorator/current-user.decorator';
+import { User } from './user.model';
 
+
+@Resolver()
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
-  constructor(private userService : UserService) {}
- 
-  @Get('me')
-  getMe(@GetUser() user: User ,) {
+  constructor(private userService: UserService) {}
+
+  @Query(() => User)
+  async me(@GetCurrentUser() user: User) {
     return user;
   }
 
-  @Patch()
-  editUser(@GetUser('id') userId: number ,@Body() dto : EditUserDto) {
-    return this.userService.editUser(userId,dto);
+  @Mutation(() => User)
+  async editUser(@GetCurrentUser() user: User, @Args('input') input: EditUserInput) {
+    return this.userService.editUser(user.id, input);
   }
 }

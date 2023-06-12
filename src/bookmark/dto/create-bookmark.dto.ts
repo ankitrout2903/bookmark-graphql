@@ -1,15 +1,13 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { InputType, Field } from '@nestjs/graphql';
 
-export class CreateBookmarkDto {
-    @IsNotEmpty()
-    @IsString()
-    title:string;
+@InputType()
+export class CreateBookmarkInput {
+  @Field()
+  title: string;
 
-    @IsNotEmpty()
-    @IsString()
-    link:string;
+  @Field()
+  link: string;
 
-    @IsOptional()
-    @IsString()
-    description?:string;
+  @Field({ nullable: true })
+  description?: string;
 }

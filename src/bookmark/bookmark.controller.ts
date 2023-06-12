@@ -1,44 +1,40 @@
-import { Body, Controller, Delete, Get, Param,
-     ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post, Delete, Patch, Body, UseGuards } from '@nestjs/common';
 import { JwtGuard } from '../auth/guard';
 import { BookmarkService } from './bookmark.service';
 import { GetUser } from '../auth/decorator';
-import { CreateBookmarkDto, EditBookmarkDto } from './dto';
+import { CreateBookmarkInput, EditBookmarkInput } from './dto';
+// import { UseGuards } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Bookmark } from './bookmark.model';
 
+@Resolver(() => Bookmark)
 @UseGuards(JwtGuard)
 @Controller('bookmarks')
 export class BookmarkController {
-    constructor(private bookmarkService : BookmarkService) {}
+  constructor(private bookmarkService: BookmarkService) {}
 
-    @Get()
-    getBookmarks(@GetUser('id') userId:number,) {
-        return this.bookmarkService.getBookmarks(userId);
-    }
+  @Query(() => [Bookmark])
+  async bookmarks(@GetUser('id') userId: number) {
+    return this.bookmarkService.getBookmarks(userId);
+  }
 
-    @Get(':id')
-    getBookmarkById(@GetUser('id') userId:number,
-    @Param('id',ParseIntPipe) bookmarkId:number) {
-        return this.bookmarkService.getBookmarkById(userId,bookmarkId);
-    }
+  @Query(() => Bookmark)
+  async bookmark(@GetUser('id') userId: number, @Args('id', ParseIntPipe) bookmarkId: number) {
+    return this.bookmarkService.getBookmarkById(userId, bookmarkId);
+  }
 
-    @Post()
-    createBookmark(@GetUser('id') userId:number,
-    @Body() dto:CreateBookmarkDto) {
-        return this.bookmarkService.createBookmark(userId,dto);
-    }
+  @Mutation(() => Bookmark)
+  async createBookmark(@GetUser('id') userId: number, @Args('input') input: CreateBookmarkInput) {
+    return this.bookmarkService.createBookmark(userId, input);
+  }
 
-    @Patch(':id')
-    editBookmarkById(@GetUser('id') userId:number,
-    @Param('id',ParseIntPipe) bookmarkId:number,
-    @Body() dto:EditBookmarkDto) {
-        return this.bookmarkService.editBookmarkById(userId,bookmarkId,dto);
-    }
+  @Mutation(() => Bookmark)
+  async editBookmark(@GetUser('id') userId: number, @Args('id', ParseIntPipe) bookmarkId: number, @Args('input') input: EditBookmarkInput) {
+    return this.bookmarkService.editBookmarkById(userId, bookmarkId, input);
+  }
 
-    @Delete(':id')
-    deleteBookmarkById(@GetUser('id') userId:number,
-    @Param('id',ParseIntPipe) bookmarkId:number
-    ) {
-        return this.bookmarkService.deleteBookmarkById(userId,bookmarkId);
-    }
-
+  @Mutation(() => Boolean)
+  async deleteBookmark(@GetUser('id') userId: number, @Args('id', ParseIntPipe) bookmarkId: number) {
+    return this.bookmarkService.deleteBookmarkById(userId, bookmarkId);
+  }
 }
