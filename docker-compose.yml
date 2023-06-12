@@ -6,19 +6,19 @@ services:
       - 5434:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: football903
+      POSTGRES_PASSWORD: 
       POSTGRES_DB: nest
     networks:
-      - freecodecamp
+      - mynet
   test-db:
     image: postgres:13
     ports:
       - 5435:5432
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: football903
+      POSTGRES_PASSWORD:
       POSTGRES_DB: nest
     networks:
-      - freecodecamp
+      - mynet
 networks:
   freecodecamp:
