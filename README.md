@@ -5,11 +5,6 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 # Bookmark API
 
 The Bookmark API is a RESTful API that allows users to manage bookmarks. It provides endpoints for creating, retrieving, updating, and deleting bookmarks, as well as user authentication and authorization.
